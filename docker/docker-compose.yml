@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  php:
+    build: ./php
+    volumes: 
+      - ./../:/var/www/html/ingresse-test
+    links:
+      - mysql
+      - redis
+  nginx:
+    build: ./nginx
+    links:
+      - php
+    volumes_from:
+      - php
+    ports:
+      - 1010:80
+  mysql:
+    build: ./mysql
+    volumes:
+      - /var/lib/mysql
+    environment:
+       MYSQL_ROOT_PASSWORD: root
+       MYSQL_DATABASE: ingresse-test
+       MYSQL_USER: admin
+       MYSQL_PASSWORD: admin
+  redis:
+    image: redis
