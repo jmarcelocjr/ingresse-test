@@ -1,11 +1,28 @@
 <?php
-
-declare(strict_types=1);
-
-use Zend\Pimple\Config\Config;
-use Zend\Pimple\Config\ContainerFactory;
+use Xtreamwayz\Pimple\Container as Container;
 
 $config  = require __DIR__ . '/config.php';
-$factory = new ContainerFactory();
 
-return $factory(new Config($config));
+$container = new Container;
+
+$container['config'] = function () {
+    return $config;
+}
+
+$container['db'] function () {
+    return new \PDO(
+        'mysql:host='.$config['host'].';dbname='.$config['database'],
+        $config['user'],
+        $config['password']
+    );
+}
+
+$container['router'] = function ($c) {
+    return new \Zend\Expressive\Router\AuraRouter();
+};
+
+$container['app'] = $container->factory(function ($c) {
+    return new \Zend\Expressive\Application($c['router'], $c);
+});
+
+return $container;
