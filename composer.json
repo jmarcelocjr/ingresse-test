@@ -1,0 +1,48 @@
+{
+    "name": "jmarcelocjr/ingresse-test",
+    "description": "Test of an API CRUD Users for Ingresse Backend Job",
+    "homepage": "https://github.com/jmarcelocjr/ingresse-test",
+    "require": {
+        "zendframework/zend-expressive": "^2.0",
+        "zendframework/zend-expressive-aurarouter": "^2.0",
+        "xtreamwayz/pimple-container-interop": "^1.0",
+        "zendframework/zend-expressive-twigrenderer": "^1.4",
+        "monolog/monolog": "^1.23",
+        "http-interop/http-middleware": "^0.4.1",
+        "matthiasmullie/scrapbook": "^1.4",
+        "propel/propel": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0.1",
+        "squizlabs/php_codesniffer": "^2.9.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ingresse\\": "src/Ingresse/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IngresseTest\\": "test/IngresseTest/"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "serve": "cd docker && docker-compose up",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+    },
+    "authors": [
+        {
+            "name": "Marcelo Cerqueira",
+            "email": "jmarcelo.cjr@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
