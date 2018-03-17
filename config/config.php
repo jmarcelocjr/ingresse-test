@@ -7,5 +7,8 @@ return [
         'user' => 'admin',
         'password' => 'admin',
         'database' => 'ingresse-test'
+    ],
+    'redis' => [
+    	'host' => 'redis'
     ]
 ];
