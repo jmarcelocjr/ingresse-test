@@ -69,7 +69,8 @@ class Get implements MiddlewareInterface
         return $delegate->process($request);
     }
 
-    private function getUserInCache($id){
+    private function getUserInCache($id)
+    {
         $users = $this->cache->get('users', []);
 
         $user = array_filter($users, function ($user) use ($id) {

@@ -18,7 +18,7 @@ $container['db'] = function () use ($config) {
     );
 };
 
-$container['cache'] = function() use ($config) {
+$container['cache'] = function () use ($config) {
     $redis = new \Redis();
     $redis->connect($config['redis']['host']);
 
@@ -36,6 +36,14 @@ $container[\Ingresse\API\v1\Middleware\Users\Get::class] = function ($c) {
 
 $container[\Ingresse\API\v1\Middleware\Users\Save::class] = function ($c) {
     return new \Ingresse\API\v1\Middleware\Users\Save($c['db'], $c['cache']);
+};
+
+$container[\Ingresse\API\v1\Middleware\Users\Put::class] = function ($c) {
+    return new \Ingresse\API\v1\Middleware\Users\Put($c['db'], $c['cache']);
+};
+
+$container[\Ingresse\API\v1\Middleware\Users\Delete::class] = function ($c) {
+    return new \Ingresse\API\v1\Middleware\Users\Delete($c['db'], $c['cache']);
 };
 
 $container['router'] = function ($c) {

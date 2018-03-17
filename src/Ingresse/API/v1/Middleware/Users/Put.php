@@ -7,7 +7,7 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 use Psr\SimpleCache\CacheInterface;
 use PDO;
 
-class Save implements MiddlewareInterface
+class Put implements MiddlewareInterface
 {
     private $db;
 
@@ -19,10 +19,17 @@ class Save implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
+
+        $id = $request->getAttribute('id');
+
         $user = $request->getParsedBody();
 
-        $sql = "INSERT INTO users (login, password, name, email)
-                VALUES (:login, :password, :name, :email)";
+        $sql = "UPDATE users
+                SET login = :login,
+                    password = :password,
+                    name = :name,
+                    email = :email
+                WHERE id = :id";
 
         $stmt = $this->db->prepare($sql);
 
@@ -30,6 +37,7 @@ class Save implements MiddlewareInterface
         $stmt->bindValue(':password', password_hash($user['password'], PASSWORD_DEFAULT), PDO::PARAM_STR);
         $stmt->bindValue(':name', $user['name'], PDO::PARAM_STR);
         $stmt->bindValue(':email', $user['email'], PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
         try {
             $saved = $stmt->execute();
@@ -45,11 +53,8 @@ class Save implements MiddlewareInterface
 
             $response = [
                 'success' => true,
-                'message' => "User saved successfully",
-                'statusCode' => 201,
-                'headers' => [
-                    'Location' => '/api/v1/users/'.$this->db->lastInsertId()
-                ]
+                'message' => "User updated successfully",
+                'statusCode' => 200
             ];
         } else {
             error_log("Error saving User: " . PHP_EOL . $stmt->errorCode() . ": " . $stmt->errorInfo()[2]);

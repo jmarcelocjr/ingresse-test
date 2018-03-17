@@ -10,18 +10,18 @@ use \Zend\Diactoros\Response\JsonResponse;
 class Response implements MiddlewareInterface
 {
 
-	public function process(ServerRequestInterface $request, DelegateInterface $delegate)
-	{
-		$response = $request->getAttribute('response');
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    {
+        $response = $request->getAttribute('response');
 
-		return new JsonResponse(
-			[
-				'success' => $response['success'],
-				'data' => $response['data'] ?? '',
-				'message' => $response['message']
-			], 
-			$response['statusCode'] ?? 200,
-			$response['headers'] ?? []
-		);
+        return new JsonResponse(
+            [
+                'success' => $response['success'],
+                'data' => $response['data'] ?? '',
+                'message' => $response['message']
+            ],
+            $response['statusCode'] ?? 200,
+            $response['headers'] ?? []
+        );
     }
 }

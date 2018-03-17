@@ -49,7 +49,7 @@ class GetAll implements MiddlewareInterface
         if ($result) {
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if(!empty($users)){
+            if (!empty($users)) {
                 $this->cache->set('users', $users);
             }
 
@@ -72,5 +72,4 @@ class GetAll implements MiddlewareInterface
 
         return $delegate->process($request);
     }
-
 }
