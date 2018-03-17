@@ -25,7 +25,7 @@ class Get implements MiddlewareInterface
             $response = [
                 'success' => $result,
                 'statusCode' => 200,
-                'data' => $this->cache->get('users')
+                'data' => $user
             ];
 
             $request = $request->withAttribute("response", $response);
@@ -51,8 +51,8 @@ class Get implements MiddlewareInterface
 
             $response = [
                 'success' => $result,
-                'statusCode' => 200,
-                'data' => $user
+                'statusCode' => !empty($user) ? 200 : 204,
+                'data' => !empty($user) ? $user : ''
             ];
         } else {
             $response = [

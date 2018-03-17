@@ -55,8 +55,8 @@ class GetAll implements MiddlewareInterface
 
             $response = [
                 'success' => $result,
-                'statusCode' => 200,
-                'data' => $users
+                'statusCode' => !empty($users)? 200 : 204,
+                'data' => !empty($users)? $users : []
             ];
         } else {
             $response = [
