@@ -1,17 +1,21 @@
 <?php
+error_reporting(0);
+
 use Interop\Http\ServerMiddleware\DelegateInterface;
-use Zend\Diactoros\Response\TextResponse;
-use Zend\Expressive\AppFactory;
+
 
 chdir(dirname(__DIR__));
 require 'vendor/autoload.php';
 
-$app = AppFactory::create();
+$container = require 'src/container.php';
 
-$app->get('/', function ($request, DelegateInterface $delegate) {
-    return new TextResponse('Hello, world!');
-});
+$app = $container['app'];
+
+$app->pipe('/api/v1', require_once 'src/Ingresse/API/v1/routes.php');
+
+$app->pipe(\Zend\Stratigility\Middleware\ErrorHandler::class);
 
 $app->pipeRoutingMiddleware();
 $app->pipeDispatchMiddleware();
+
 $app->run();
