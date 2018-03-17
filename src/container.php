@@ -18,12 +18,24 @@ $container['db'] = function () use ($config) {
     );
 };
 
+$container['cache'] = function() use ($config) {
+    $redis = new \Redis();
+    $redis->connect($config['redis']['host']);
+
+    $cache = new \MatthiasMullie\Scrapbook\Adapters\Redis($redis);
+    return new \MatthiasMullie\Scrapbook\Psr16\SimpleCache($cache);
+};
+
 $container[\Ingresse\API\v1\Middleware\Users\GetAll::class] = function ($c) {
-    return new \Ingresse\API\v1\Middleware\Users\GetAll($c['db']);
+    return new \Ingresse\API\v1\Middleware\Users\GetAll($c['db'], $c['cache']);
+};
+
+$container[\Ingresse\API\v1\Middleware\Users\Get::class] = function ($c) {
+    return new \Ingresse\API\v1\Middleware\Users\Get($c['db'], $c['cache']);
 };
 
 $container[\Ingresse\API\v1\Middleware\Users\Save::class] = function ($c) {
-    return new \Ingresse\API\v1\Middleware\Users\Save($c['db']);
+    return new \Ingresse\API\v1\Middleware\Users\Save($c['db'], $c['cache']);
 };
 
 $container['router'] = function ($c) {

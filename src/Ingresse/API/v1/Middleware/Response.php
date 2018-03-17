@@ -20,7 +20,7 @@ class Response implements MiddlewareInterface
 				'data' => $response['data'] ?? '',
 				'message' => $response['message']
 			], 
-			$response['statusCode'],
+			$response['statusCode'] ?? 200,
 			$response['headers'] ?? []
 		);
     }

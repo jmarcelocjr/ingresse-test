@@ -4,15 +4,17 @@ namespace Ingresse\API\v1\Middleware\Users;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Interop\Http\ServerMiddleware\DelegateInterface;
+use Psr\SimpleCache\CacheInterface;
 use PDO;
 
 class Save implements MiddlewareInterface
 {
     private $db;
 
-    public function __construct(PDO $db)
+    public function __construct(PDO $db, CacheInterface $cache)
     {
         $this->db = $db;
+        $this->cache = $cache;
     }
 
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
@@ -37,6 +39,11 @@ class Save implements MiddlewareInterface
         }
 
         if ($saved) {
+
+            if ($this->cache->has('users')) {
+                $this->cache->delete('users');
+            }
+
             $response = [
                 'success' => true,
                 'message' => "User saved successfully",
